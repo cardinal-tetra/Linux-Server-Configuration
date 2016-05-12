@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css')}}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <div class='container-fluid'>
+            <div class="row header">
+                <div class="col-md-1 col-xs-1 home-button-position">
+                    <a href="{{url_for('homepage')}}" class="home-button">⌂</a>
+                </div>
+                <div class="col-md-10 col-xs-10 text-center">
+                    <h2>Westeros Catalog</h2>
+                </div>
+                <div class="col-md-1 col-xs-1 log-position">
+                    {% if 'username' not in session %}
+                    <a href="{{url_for('login')}}" class="log">Login</a>
+                    {% else %}
+                    <a href="{{url_for('logout')}}" class="log">Logout</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

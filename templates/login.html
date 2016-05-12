@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css')}}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+        <script>
+//            this is the callback function once Google sends the response
+            function signInCallback(authResult) {
+                if (authResult['code']) {
+//                    if response contains the one-time use code, we will send it to the server by an AJAX call
+                    $.ajax({
+                        type: 'POST',
+                        url: '/catalog/login?state={{STATE}}',
+                        processData: false,
+                        contentType: 'application/octet-stream; charset=utf-8',
+                        data: authResult['code'],
+                        success: function(result) {
+                            if (result) {
+                             $('.content').html("<div class='row'><div class='col-md-5 col-md-offset-2 col-xs-5 col-xs-offset-2'><h4> Welcome, " + result + "</h4></div></div>");
+                                setTimeout(function() {
+                                    window.location.href = '/';
+                                }, 4000)
+                            }
+                            else if (authResult['error']) {
+                                $('.content').html('<p>We experienced an error</p>')
+                            }
+                            else {
+                                $('.content').html('<p>Failed to make an AJAX request, check your configuration and console')
+                            }
+                        }
+                    })
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class='container-fluid'>
+            <div class="row header">
+                <div class="col-md-12 text-center">
+                    <h3>Westeros Catalog</h3>
+                </div>
+            </div>
+            <div class="row content">
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                    <div class="well">
+                        <p>Login using Google+</p>
+                        <div id="signInButton">
+                            <span class="g-signin"
+                                  data-scope="openid email"
+                                  data-clientid="243051458301-cepfgon0bbg3qspciko710k9lf4n6eam.apps.googleusercontent.com"
+                                  data-redirecturi="post message"
+                                  data-accesstype="offline"
+                                  data-cookiepolicy="single_host_origin"
+                                  data-callback="signInCallback"
+                                  data-approvalprompt="force"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

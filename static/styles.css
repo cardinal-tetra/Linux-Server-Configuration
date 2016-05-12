@@ -1,0 +1,36 @@
+.header {
+    background-color: darkred;
+    color: white;
+    font-family: fantasy;
+}
+
+.content {
+    font-family: fantasy;
+    margin-top: 1em;
+}
+
+.home-button-position {
+    margin-top: 12px;
+}
+
+.home-button {
+    font-size: 200%;
+    color: white;
+}
+
+.log-position {
+    margin-top: 22px;
+    padding-right: 5px;
+}
+
+.log {
+    color: white;
+}
+
+.home-button:hover, .log:hover {
+    color: gold;
+}
+
+a:hover {
+    color: darkred;
+}

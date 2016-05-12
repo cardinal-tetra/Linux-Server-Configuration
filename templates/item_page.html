@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row content">
+    <div class="col-md-6 col-xs-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{item.name}} {{item.cat_name}}</div>
+            <div class="panel-body">
+                <p>{{item.description}}</p>
+                {% if item.user_id == session['user_id'] %}
+                    <p><a href="{{url_for('edit_item', item = item.name)}}">Edit</a> | <a href="{{url_for('delete_item', item = item.name)}}">Delete</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xs-6">
+        <img class="img-thumbnail" src="{{item.image}}">
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row content">
+    <div class="col-md-offset-2 col-xs-offset-2">
+        <h4>Add Another</h4><br>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+            <p>{{message}}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+</div>
+<div class="row content">
+    <div class="col-md-6 col-md-offset-2 col-xs-6 col-xs-offset-2">
+        <form action="{{url_for('add_item', cat_name = select_tab)}}" method="post">
+            Name:
+            <input type="text" name="name" class="form-control"><br>
+            Category:
+            <select name="category" class="form-control">
+                {% for category in categories %}
+                <option value="{{category.name}}" {% if category.name == select_tab %} selected {% endif %}>{{category.name}}</option>
+                {% endfor %}
+            </select><br>
+            Description: <br>
+            <textarea rows="3" class="form-control" name="description"></textarea><br>
+            Image URL:
+            <input type="text" name="image" class="form-control"><br><br>
+            <input type="submit" value="create">
+        </form>
+    </div>
+</div>
+{% endblock %}
