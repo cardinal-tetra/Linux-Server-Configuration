@@ -1,20 +1,15 @@
-#Linux Server Configuration#
+##Linux Server Configuration##
 
 ###Key Information###
-The IP address is 52.35.98.40 and the SSH port is 2200. The authentication key and password for grader user is provided in the 'notes to reviewer' field. The complete URL to the application is: http://ec2-52-35-98-40.us-west-2.compute.amazonaws.com
 
-Clicking on the link will take you to the homepage of the web application- it shows you all the existing categories and associated items. Clicking on the category will show you only the items that belong to it. 
-
-The pages allow you to log in using your Google+ account. A link near the items panel allows you to add new items, but you have to be logged in to do so. Clicking on an item takes you to its own page which displays unique information, and if you are logged in as the creator, the links allowing you to edit or delete the item.
-
-There is also a JSON endpoint allowing the making of API calls to retrieve information relating to all the items stored in the application: simply add '/catalog/JSON' to the url.
+This was the final project of Udacity's Full Stack Web Developer Nanodegree. Students were given the authentication key to a virtual server from Amazon Web Services with the objective of securely hosting a properly functioning catalog application. This included a number of tasks such as installing updates, securing the server from multiple attack vectors, installing/configuring web and database servers- the complete steps are outlined below. The virtual server ceased to host the project after completion of the nanodegree, however the entire point of the exercise was not to build an application but to demonstrate the knowledge and ability to configure a baseline Linux web server to a high standard of security and performance.
 
 
 ###Basic Configuration###
 
 SSH into the virtual server as root user: `ssh -i ~/.ssh/udacity_key.rsa root@52.35.98.40`
 
-Create a new user named grader and input password when prompted: `adduser grader`
+For the purposes of assessment, create a new user named grader and input password when prompted: `adduser grader`
 
 Set up key authentication for grader:
 1. `mkdir /home/grader/.ssh`
@@ -26,31 +21,31 @@ Set up key authentication for grader:
 7. `chgrp grader /home/grader/.ssh/authorized_keys`
 8. `chmod 644 /home/grader/.ssh/authorized_keys`
 
-Give the grader sudo permissions ([askubuntu](http://askubuntu.com/questions/168280/how-do-i-grant-sudo-privileges-to-an-existing-user), [stackoverflow](http://stackoverflow.com/questions/33441873/aws-error-sudo-unable-to-resolve-host-ip-10-0-xx-xx))
+Give the grader sudo permissions ([askubuntu](http://askubuntu.com/questions/168280/how-do-i-grant-sudo-privileges-to-an-existing-user), [stackoverflow](http://stackoverflow.com/questions/33441873/aws-error-sudo-unable-to-resolve-host-ip-10-0-xx-xx)):
 1. `nano /etc/sudoers.d/grader` add these lines and save: grader    ALL = (ALL:ALL) ALL
 2. `nano /etc/hosts` add these lines and save: 127.0.0.1 ip-10-20-39-75
 
-Remove root user access
+Remove root user access:
 1. `nano /etc/ssh/sshd_config`
 2. Add/edit the following line and save: PermitRootLogin no
 3. `service ssh restart`
 
-Update all currently installed packages
+Upgrade all currently installed packages:
 1. `apt-get update`
 2. `apt-get upgrade`
 
-Configure local timezone to UTC
+Configure local timezone to UTC:
 1. `date` shows setting already UTC.
 
 ###Secure the Server###
-Change ssh port from 22 to 2200 ([digitalocean](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-12-04))
+Change SSH port from 22 to 2200 ([digitalocean](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-12-04)):
 1. `nano /etc/ssh/sshd_config`
 2. Change 'Port' to 2200 and save.
 3. `reload ssh`
 
 `exit` and login as the grader with `ssh -i ~/.ssh/udacity_key.rsa -p 2200 grader@52.35.98.40`
 
-Configure UFW ([askubuntu](http://askubuntu.com/questions/187071/how-do-i-restart-shutdown-from-a-terminal, https://help.ubuntu.com/community/UFW#Allow_Access))
+Configure UFW ([askubuntu](http://askubuntu.com/questions/187071/how-do-i-restart-shutdown-from-a-terminal, https://help.ubuntu.com/community/UFW#Allow_Access)):
 1. `sudo ufw default deny incoming`
 2. `sudo ufw default allow outgoing`
 3. `sudo ufw allow 2200`
@@ -62,21 +57,21 @@ Configure UFW ([askubuntu](http://askubuntu.com/questions/187071/how-do-i-restar
 
 ###Deploy Application###
 
-Install and Apache and mod_wsgi
+Install Apache and mod_wsgi:
 1. `sudo apt-get install apache2`
 2. `sudo apt-get install libapache2-mod-wsgi`
 
-Install and configure database ([digitalocean](https://www.digitalocean.com/community/tutorials/how-and-when-to-use-sqlite))
+Install and configure database ([digitalocean](https://www.digitalocean.com/community/tutorials/how-and-when-to-use-sqlite)):
 1. sqlite3 with `sudo apt-get install sqlite3`
 2. sqlite3 interface with `sudo apt-get install sqlite3 libsqlite3-dev`
 
-Install dependencies ([digitalocean](https://www.digitalocean.com/community/tutorials/how-to-install-git-on-ubuntu-14-04))
+Install dependencies ([digitalocean](https://www.digitalocean.com/community/tutorials/how-to-install-git-on-ubuntu-14-04)):
 1. pip with `sudo apt-get install python-pip`
 2. sqlalchemy with `sudo pip install sqlalchemy`
 3. flask with `sudo pip install Flask`
 4. git  with `sudo apt-get install git`
 
-Clone and setup the Catalog App project ([digitalocean](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps))
+Clone and setup the Catalog application ([digitalocean](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)):
 1. `sudo cd /var/www`
 2. `sudo git clone https://github.com/cardinal-tetra/Westeros-Catalog.git`
 3. Set up the database: `sudo python catalog/database_setup.py`
@@ -87,6 +82,6 @@ Clone and setup the Catalog App project ([digitalocean](https://www.digitalocean
 8. `sudo nano /var/www/start.wsgi` and write logic to run your application.
 9. `sudo apache2ctl restart`
 
-Configure OAuth2 ([python](https://pypi.python.org/pypi/oauth2client/))
+Configure OAuth2 ([python](https://pypi.python.org/pypi/oauth2client/)):
 1. `sudo pip install --upgrade oauth2client`
-2. Visit Google developer console and add application url to 'Javascript origins' and 'authorised redirect URI'.
+2. Visit Google developer console and add application url to 'Javascript origins' and 'authorised redirect URI'

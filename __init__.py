@@ -244,5 +244,4 @@ def itemsJSON():
     return jsonify(items = [item.serialize for item in items])
     
 if __name__ == '__main__':
-    app.debug = True
     app.run()
