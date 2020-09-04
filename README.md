@@ -1,11 +1,11 @@
-##Linux Server Configuration##
+## Linux Server Configuration
 
-###Key Information###
+### Key Information
 
 This was the final project of Udacity's Full Stack Web Developer Nanodegree. Students were given the authentication key to a virtual server from Amazon Web Services with the objective of securely hosting a properly functioning catalog application. This included a number of tasks such as installing updates, securing the server from multiple attack vectors, installing/configuring web and database servers- the complete steps are outlined below. The virtual server ceased to host the project after completion of the nanodegree, however the entire point of the exercise was not to build an application but to demonstrate the knowledge and ability to configure a baseline Linux web server to a high standard of security and performance.
 
 
-###Basic Configuration###
+### Basic Configuration
 
 SSH into the virtual server as root user: `ssh -i ~/.ssh/udacity_key.rsa root@52.35.98.40`
 
@@ -37,7 +37,7 @@ Upgrade all currently installed packages:
 Configure local timezone to UTC:  
 1. `date` shows setting already UTC.  
 
-###Secure the Server###
+### Secure the Server
 Change SSH port from 22 to 2200 ([digitalocean](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-12-04)):  
 1. `nano /etc/ssh/sshd_config`  
 2. Change 'Port' to 2200 and save.  
@@ -45,7 +45,7 @@ Change SSH port from 22 to 2200 ([digitalocean](https://www.digitalocean.com/com
 
 `exit` and login as the grader with `ssh -i ~/.ssh/udacity_key.rsa -p 2200 grader@52.35.98.40`
 
-Configure UFW ([askubuntu](http://askubuntu.com/questions/187071/how-do-i-restart-shutdown-from-a-terminal, https://help.ubuntu.com/community/UFW#Allow_Access)):  
+Configure UFW ([askubuntu](http://askubuntu.com/questions/187071/how-do-i-restart-shutdown-from-a-terminal), [ubuntuhelp](https://help.ubuntu.com/community/UFW#Allow_Access)):  
 1. `sudo ufw default deny incoming`  
 2. `sudo ufw default allow outgoing`  
 3. `sudo ufw allow 2200`  
@@ -55,7 +55,7 @@ Configure UFW ([askubuntu](http://askubuntu.com/questions/187071/how-do-i-restar
 7. `sudo reboot`  
 8. Check with `sudo ufw status`  
 
-###Deploy Application###
+### Deploy Application
 
 Install Apache and mod_wsgi:  
 1. `sudo apt-get install apache2`  
